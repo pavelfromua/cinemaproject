@@ -40,9 +40,9 @@ public class Main {
         MovieSessionService movieSessionService = (MovieSessionService) injector
                 .getInstance(MovieSessionService.class);
         movieSessionService.add(movieSession);
-        System.out.println("start");
+
         movieSessionService.findAvailableSessions(movie.getId(), LocalDate.now())
                 .forEach(System.out::println);
-        System.out.println("finish");
+
     }
 }
