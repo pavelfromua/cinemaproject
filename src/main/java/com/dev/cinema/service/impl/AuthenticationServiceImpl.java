@@ -6,6 +6,7 @@ import com.dev.cinema.lib.Inject;
 import com.dev.cinema.lib.Service;
 import com.dev.cinema.model.User;
 import com.dev.cinema.service.AuthenticationService;
+import com.dev.cinema.service.ShoppingCartService;
 import com.dev.cinema.service.UserService;
 import com.dev.cinema.util.HashUtil;
 import java.util.Optional;
@@ -14,6 +15,9 @@ import java.util.Optional;
 public class AuthenticationServiceImpl implements AuthenticationService {
     @Inject
     UserService userService;
+
+    @Inject
+    ShoppingCartService shoppingCartService;
 
     public boolean isPasswordValid(User user, String password) {
         if (user.getPassword().equals(HashUtil.hashPassword(password, user.getSalt()))) {
@@ -26,14 +30,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public User login(String email, String password) throws AuthenticationException {
         Optional<User> userOptional = userService.findByEmail(email);
+        User user = null;
         if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            if (isPasswordValid(user, password)) {
-                return user;
+            user = userOptional.get();
+            if (user == null || !isPasswordValid(user, password)) {
+                throw new AuthenticationException("Incorrect login or password");
             }
         }
 
-        throw new AuthenticationException("Incorrect login or password");
+        return user;
     }
 
     @Override
@@ -55,8 +60,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user.setEmail(email);
         user.setPassword(password);
 
-        userService.add(user);
+        User userFromDb = userService.add(user);
+        shoppingCartService.registerNewShoppingCart(userFromDb);
 
-        return user;
+        return userFromDb;
     }
 }
