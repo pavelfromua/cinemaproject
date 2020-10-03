@@ -1,28 +1,25 @@
 package com.dev.cinema;
 
+import com.dev.cinema.config.AppConfig;
 import com.dev.cinema.exceptions.AuthenticationException;
 import com.dev.cinema.exceptions.RegistrationException;
-import com.dev.cinema.lib.Injector;
-import com.dev.cinema.model.CinemaHall;
-import com.dev.cinema.model.Movie;
-import com.dev.cinema.model.MovieSession;
-import com.dev.cinema.model.ShoppingCart;
 import com.dev.cinema.model.User;
-import com.dev.cinema.service.AuthenticationService;
-import com.dev.cinema.service.CinemaHallService;
-import com.dev.cinema.service.MovieService;
-import com.dev.cinema.service.MovieSessionService;
-import com.dev.cinema.service.OrderService;
-import com.dev.cinema.service.ShoppingCartService;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.List;
+import com.dev.cinema.service.UserService;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class Main {
-    private static Injector injector = Injector.getInstance("com.dev.cinema");
+    //private static Injector injector = Injector.getInstance("com.dev.cinema");
 
     public static void main(String[] args) throws RegistrationException, AuthenticationException {
+        AnnotationConfigApplicationContext context =
+                new AnnotationConfigApplicationContext(AppConfig.class);
+
+        UserService userService = context.getBean(UserService.class);
+        User user = new User();
+        user.setEmail("pavelfromua@gmail.com");
+        user.setPassword("password");
+        userService.add(user);
+        /*
         MovieService movieService = (MovieService) injector.getInstance(MovieService.class);
 
         movieService.getAll().forEach(System.out::println);
@@ -67,7 +64,7 @@ public class Main {
 
         AuthenticationService authenticationService = (AuthenticationService) injector
                 .getInstance(AuthenticationService.class);
-        authenticationService.register("pavelfromua@gmail.com", "password"); //is already registered
+        authenticationService.register("pavelfromua@gmail.com", "password");
 
         User user = authenticationService.login("pavelfromua@gmail.com", "password");
 
@@ -85,7 +82,6 @@ public class Main {
         List<MovieSession> availableSessions2 = movieSessionService
                 .findAvailableSessions(movie2.getId(), LocalDate.now());
         bucketService.addSession(availableSessions2.get(0), user);
-        User user2 = authenticationService.register("test@in.ua", "passw");
-
+        User user2 = authenticationService.register("test@in.ua", "passw");*/
     }
 }
