@@ -3,7 +3,10 @@ package com.dev.cinema.dao.impl;
 import com.dev.cinema.dao.UserDao;
 import com.dev.cinema.exceptions.DataProcessingException;
 import com.dev.cinema.model.User;
+import com.dev.cinema.util.HibernateUtil;
+import java.util.List;
 import java.util.Optional;
+import javax.persistence.criteria.CriteriaQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -43,6 +46,31 @@ public class UserDaoImpl implements UserDao {
             return Optional.ofNullable(query.uniqueResult());
         } catch (Exception e) {
             throw new DataProcessingException("Error finding user by email. ", e);
+        }
+    }
+
+    @Override
+    public User findById(Long id) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<User> query = session.createQuery("from User where id = :id");
+
+            query.setParameter("id", id);
+            return query.uniqueResult();
+        } catch (Exception e) {
+            throw new DataProcessingException("Error finding user by id. ", e);
+        }
+    }
+
+    @Override
+    public List<User> getAll() {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            CriteriaQuery<User> criteriaQuery = session.getCriteriaBuilder()
+                    .createQuery(User.class);
+            criteriaQuery.from(User.class);
+
+            return session.createQuery(criteriaQuery).getResultList();
+        } catch (Exception e) {
+            throw new DataProcessingException("Error retrieving all users. ", e);
         }
     }
 }
