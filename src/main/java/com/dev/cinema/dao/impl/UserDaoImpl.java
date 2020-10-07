@@ -3,7 +3,6 @@ package com.dev.cinema.dao.impl;
 import com.dev.cinema.dao.UserDao;
 import com.dev.cinema.exceptions.DataProcessingException;
 import com.dev.cinema.model.User;
-import com.dev.cinema.util.HibernateUtil;
 import java.util.List;
 import java.util.Optional;
 import javax.persistence.criteria.CriteriaQuery;
@@ -63,7 +62,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public List<User> getAll() {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             CriteriaQuery<User> criteriaQuery = session.getCriteriaBuilder()
                     .createQuery(User.class);
             criteriaQuery.from(User.class);

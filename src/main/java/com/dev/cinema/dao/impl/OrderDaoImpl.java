@@ -5,23 +5,27 @@ import com.dev.cinema.exceptions.DataProcessingException;
 import com.dev.cinema.model.Order;
 import com.dev.cinema.model.Ticket;
 import com.dev.cinema.model.User;
-import com.dev.cinema.util.HibernateUtil;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class OrderDaoImpl implements OrderDao {
+    @Autowired
+    private SessionFactory sessionFactory;
+
     @Override
     public Order create(List<Ticket> tickets, User user) {
         Order order = new Order(tickets, user);
         order.setOrderDate(LocalDateTime.now());
 
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
             Long itemId = (Long) session.save(order);
             transaction.commit();
@@ -38,7 +42,7 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public List<Order> getOrderHistory(User user) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             Query<Order> query = session.createQuery(
                     "FROM Order o "
                             + "LEFT JOIN FETCH o.tickets "

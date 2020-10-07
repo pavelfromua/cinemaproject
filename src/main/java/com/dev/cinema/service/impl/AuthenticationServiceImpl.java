@@ -2,22 +2,24 @@ package com.dev.cinema.service.impl;
 
 import com.dev.cinema.exceptions.AuthenticationException;
 import com.dev.cinema.exceptions.RegistrationException;
-import com.dev.cinema.lib.Inject;
-import com.dev.cinema.lib.Service;
 import com.dev.cinema.model.User;
 import com.dev.cinema.service.AuthenticationService;
 import com.dev.cinema.service.ShoppingCartService;
 import com.dev.cinema.service.UserService;
 import com.dev.cinema.util.HashUtil;
 import java.util.Optional;
+import org.springframework.stereotype.Service;
 
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
-    @Inject
-    UserService userService;
+    private final UserService userService;
+    private final ShoppingCartService shoppingCartService;
 
-    @Inject
-    ShoppingCartService shoppingCartService;
+    public AuthenticationServiceImpl(UserService userService,
+                                     ShoppingCartService shoppingCartService) {
+        this.userService = userService;
+        this.shoppingCartService = shoppingCartService;
+    }
 
     public boolean isPasswordValid(User user, String password) {
         if (user.getPassword().equals(HashUtil.hashPassword(password, user.getSalt()))) {
