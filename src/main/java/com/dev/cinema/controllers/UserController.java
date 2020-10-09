@@ -1,8 +1,8 @@
 package com.dev.cinema.controllers;
 
-import com.dev.cinema.UserResponseDto;
-import com.dev.cinema.mapper.UserMapper;
 import com.dev.cinema.model.User;
+import com.dev.cinema.model.dto.UserResponseDto;
+import com.dev.cinema.model.dto.mapper.UserMapper;
 import com.dev.cinema.service.UserService;
 import java.util.List;
 import java.util.stream.Collectors;

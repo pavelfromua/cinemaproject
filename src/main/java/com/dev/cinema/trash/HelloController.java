@@ -1,6 +1,6 @@
 package com.dev.cinema.trash;
 
-import com.dev.cinema.UserResponseDto;
+import com.dev.cinema.model.dto.UserResponseDto;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
