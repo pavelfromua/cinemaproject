@@ -1,4 +1,4 @@
-package com.dev.cinema;
+package com.dev.cinema.model.dto;
 
 public class UserResponseDto {
     private String name;

@@ -1,5 +1,6 @@
 package com.dev.cinema.config;
 
+import com.dev.cinema.model.Movie;
 import com.dev.cinema.model.User;
 import java.util.Properties;
 import javax.sql.DataSource;
@@ -17,7 +18,7 @@ import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 @ComponentScan(basePackages = {
         "com.dev.cinema.dao",
         "com.dev.cinema.service",
-        "com.dev.cinema.mapper"
+        "com.dev.cinema.model.dto.mapper"
 })
 public class AppConfig {
     @Autowired
@@ -45,6 +46,7 @@ public class AppConfig {
 
         factoryBean.setHibernateProperties(properties);
         factoryBean.setAnnotatedClasses(User.class);
+        factoryBean.setAnnotatedClasses(Movie.class);
 
         return factoryBean;
     }

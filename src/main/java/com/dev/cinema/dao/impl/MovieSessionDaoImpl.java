@@ -52,4 +52,16 @@ public class MovieSessionDaoImpl implements MovieSessionDao {
             throw new RuntimeException("Can't insert Cinema Hall entity", e);
         }
     }
+
+    @Override
+    public MovieSession findById(Long id) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<MovieSession> query = session.createQuery("from MovieSession where id = :id");
+
+            query.setParameter("id", id);
+            return query.uniqueResult();
+        } catch (Exception e) {
+            throw new DataProcessingException("Error finding movie session by id. ", e);
+        }
+    }
 }
