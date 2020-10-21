@@ -5,6 +5,7 @@ import com.dev.cinema.model.dto.UserResponseDto;
 import com.dev.cinema.model.dto.mapper.UserMapper;
 import com.dev.cinema.service.UserService;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -60,6 +61,16 @@ public class UserController {
         }
 
         return userMapper.toDto(user);
+    }
+
+    @RequestMapping(value = "/users/by-email?{email}", method = RequestMethod.GET)
+    public UserResponseDto getByEmail(@PathVariable String email) {
+        Optional<User> userOptional = userService.findByEmail(email);
+        if (!userOptional.isPresent()) {
+            return new UserResponseDto();
+        }
+
+        return userMapper.toDto(userOptional.get());
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
